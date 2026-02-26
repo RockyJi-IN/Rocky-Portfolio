@@ -2,63 +2,101 @@
 <html>
 <head>
 <title>Rocky | Developer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body {
-  margin:0;
-  font-family: Arial;
-  background: #0a0f1c;
-  color: white;
-  text-align:center;
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background: linear-gradient(135deg,#0f172a,#020617);
+color:white;
+text-align:center;
 }
 
-h1 {
-  margin-top: 150px;
-  font-size: 45px;
+h1{
+margin-top:120px;
+font-size:50px;
 }
 
-.highlight {
-  color: #00ffff;
+.highlight{
+background: linear-gradient(45deg,#00ffff,#a020f0);
+-webkit-background-clip:text;
+color:transparent;
 }
 
-.btn {
-  padding: 12px 25px;
-  background: linear-gradient(45deg,#00ffff,#a020f0);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size:16px;
-  cursor:pointer;
-  margin:10px;
+.btn{
+padding:12px 30px;
+margin:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+color:white;
+background:linear-gradient(45deg,#00ffff,#a020f0);
+transition:0.3s;
 }
-.card {
-  background:#111827;
-  padding:20px;
-  border-radius:10px;
-  width:250px;
-  margin:15px;
-  display:inline-block;
+
+.btn:hover{
+transform:scale(1.1);
+}
+
+.section{
+margin-top:100px;
+}
+
+.card{
+display:inline-block;
+background:#111827;
+padding:20px;
+margin:15px;
+width:260px;
+border-radius:12px;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 0 20px #00ffff;
+}
+
+footer{
+margin-top:100px;
+padding:20px;
+background:#0f172a;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Minecraft • Discord <br> <span class="highlight">Developer</span></h1>
+<h1>Hi, I'm <span class="highlight">Rocky</span></h1>
+<p>Minecraft & Discord Developer</p>
 
 <button class="btn">View Projects</button>
-<button class="btn">Contact</button>
+<button class="btn">Contact Me</button>
 
-<h2 style="margin-top:80px;">My Projects</h2>
+<div class="section">
+<h2>My Projects</h2>
 
 <div class="card">
-<h3>SMP Setup</h3>
-<p>Optimized Minecraft survival server.</p>
+<h3>SMP Server Setup</h3>
+<p>Optimized Minecraft survival server with plugins.</p>
 </div>
 
 <div class="card">
-<h3>Discord Bot</h3>
-<p>Custom moderation & economy bot.</p>
+<h3>Custom Discord Bot</h3>
+<p>Moderation + Economy + Ticket system bot.</p>
 </div>
+
+<div class="card">
+<h3>Plugin Configuration</h3>
+<p>Advanced Minecraft plugin setup & tuning.</p>
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 Rocky | Open For Work</p>
+</footer>
 
 </body>
-</html>
+</html> 
