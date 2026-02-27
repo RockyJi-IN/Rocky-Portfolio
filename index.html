@@ -4,6 +4,9 @@
 <title>Rocky | Developer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+html{
+scroll-behavior: smooth;
+}
 body{
 margin:0;
 font-family:Arial, sans-serif;
@@ -45,17 +48,19 @@ margin-top:100px;
 
 .card{
 display:inline-block;
-background:#111827;
+background:rgba(255,255,255,0.05);
+backdrop-filter: blur(10px);
 padding:20px;
 margin:15px;
 width:260px;
-border-radius:12px;
+border-radius:15px;
+border:1px solid rgba(255,255,255,0.1);
 transition:0.3s;
 }
 
 .card:hover{
-transform:translateY(-10px);
-box-shadow:0 0 20px #00ffff;
+transform:translateY(-12px) scale(1.05);
+box-shadow:0 0 25px #00ffff;
 }
 
 footer{
@@ -69,8 +74,7 @@ background:#0f172a;
 <body>
 
 <h1>Hi, I'm <span class="highlight">Rocky</span></h1>
-<p>Minecraft & Discord Developer</p>
-
+<p><span id="typing"></span></p>
 <button class="btn">View Projects</button>
 <button class="btn">Contact Me</button>
 
@@ -93,10 +97,27 @@ background:#0f172a;
 </div>
 
 </div>
-
+<div class="section" id="contact">
+<h2>Contact Me</h2>
+<p>Email: <a href="mailto:rocky@example.com" style="color:#00ffff;">rocky@example.com</a></p>
+<p>Discord: Rocky#0001</p>
+</div>
 <footer>
 <p>© 2026 Rocky | Open For Work</p>
 </footer>
+<script>
+const text = "Minecraft & Discord Developer";
+let index = 0;
 
+function typeEffect() {
+  if (index < text.length) {
+    document.getElementById("typing").innerHTML += text.charAt(index);
+    index++;
+    setTimeout(typeEffect, 70);
+  }
+}
+
+typeEffect();
+</script>
 </body>
 </html> 
