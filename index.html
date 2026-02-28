@@ -1,163 +1,288 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>RockyJi | Developer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rocky Ji | Developer</title>
 
 <style>
-
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Segoe UI,sans-serif
+}
 body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#070b1a;
-color:white;
-overflow-x:hidden;
+  background:radial-gradient(circle at top,#0f0f1a,#05050a);
+  color:#fff;
+  overflow-x:hidden
 }
-
-/* Stars background */
 body::before{
-content:"";
-position:fixed;
-width:100%;
-height:100%;
-background-image:radial-gradient(#00f2ff 1px, transparent 1px);
-background-size:40px 40px;
-opacity:0.15;
-z-index:-1;
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(#00ffe1 1px,transparent 1px),
+    radial-gradient(#a855f7 1px,transparent 1px);
+  background-size:80px 80px;
+  opacity:.15;
+  animation:move 20s linear infinite;
+  z-index:-1
 }
-
-/* Top Left Name */
+@keyframes move{
+  from{background-position:0 0,40px 40px}
+  to{background-position:400px 400px,440px 440px}
+}
+header{
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
 .logo{
-position:fixed;
-top:20px;
-left:30px;
-font-weight:bold;
-color:#00f2ff;
-font-size:20px;
+  font-weight:700;
+  color:#00ffe1;
+  text-shadow:0 0 12px #00ffe1
 }
-
 .hero{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
+  padding:60px 20px;
+  text-align:center
 }
-
 .status{
-border:1px solid #00f2ff;
-padding:8px 20px;
-border-radius:20px;
-margin-bottom:30px;
-color:#00f2ff;
-font-size:14px;
+  display:inline-block;
+  padding:6px 14px;
+  border:1px solid #00ffe1;
+  border-radius:20px;
+  color:#00ffe1;
+  margin-bottom:20px
 }
-
 .hero h1{
-font-size:50px;
-margin:10px 0;
+  font-size:32px;
+  margin:20px 0
 }
-
-.web{
-color:#a855f7;
-text-shadow:0 0 20px #a855f7;
+.hero h1 span{
+  color:#a855f7;
+  text-shadow:0 0 12px #a855f7
 }
-
-.subtitle{
-opacity:0.7;
-margin-bottom:30px;
+.hero p{
+  opacity:.8;
+  margin-bottom:30px
 }
-
-.btn{
-padding:12px 35px;
-border-radius:8px;
-font-weight:bold;
-margin:10px;
-cursor:pointer;
-text-decoration:none;
-display:inline-block;
-transition:0.3s;
+.buttons a{
+  padding:12px 22px;
+  margin:5px;
+  text-decoration:none;
+  border-radius:6px;
+  font-weight:700
 }
-
-.btn-primary{
-background:linear-gradient(45deg,#00f2ff,#a855f7);
-color:black;
+.primary{
+  background:linear-gradient(90deg,#00ffe1,#a855f7);
+  color:#000
 }
-
-.btn-outline{
-border:1px solid #00f2ff;
-color:#00f2ff;
+.secondary{
+  border:1px solid #00ffe1;
+  color:#00ffe1
 }
-
-.btn:hover{
-transform:translateY(-4px);
+section{
+  padding:60px 20px
 }
-
-.section{
-padding:100px 20px;
-text-align:center;
+.section-title{
+  text-align:center;
+  margin-bottom:30px
 }
-
+.section-title h2 span{
+  color:#00ffe1
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px
+}
 .card{
-background:#0f172a;
-border:1px solid #00f2ff30;
-padding:30px;
-border-radius:15px;
-max-width:500px;
-margin:20px auto;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(0,255,225,.2);
+  padding:20px;
+  border-radius:14px;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 25px rgba(0,255,225,.08)
+}
+.card h3{
+  color:#00ffe1;
+  margin-bottom:10px
+}
+.card p{
+  opacity:.85;
+  line-height:1.6
 }
 
+/* CONTACT */
+.contact-cta{
+  text-align:center;
+  padding:80px 20px
+}
+.contact-text{
+  margin:15px 0 25px;
+  opacity:.8
+}
+.contact-links{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap
+}
+.contact-links a{
+  padding:12px 22px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:700;
+  color:#000;
+  background:linear-gradient(90deg,#00ffe1,#a855f7);
+  box-shadow:0 0 18px rgba(0,255,225,.5);
+  transition:.3s
+}
+.contact-links a:hover{
+  transform:translateY(-4px);
+  box-shadow:0 0 30px rgba(168,85,247,.8)
+}
+
+footer{
+  text-align:center;
+  padding:30px;
+  opacity:.6
+}
 </style>
 </head>
 
 <body>
 
-<div class="logo">⚡ Rocky Ji</div>
+<header>
+  <div class="logo">⚡RockyJi</div>
+</header>
 
-<div class="hero">
+<section class="hero">
+  <span class="status">SYSTEM STATUS : ONLINE</span>
+  <h1>MINECRAFT  •<br><span>DISCORD</span></h1>
+  <p>Java • Spigot • Discord Bots • Modern Web Apps</p>
 
-<div class="status">SYSTEM STATUS : ONLINE</div>
+  <div class="buttons">
+    <a href="#projects" class="primary">VIEW PROJECTS</a>
+    <a href="contact.html" class="secondary">CONTACT</a>
+  </div>
+</section>
+  
+<!-- EXPERIENCE / CLIENTS / PROJECTS COMPLETED -->
 
-<h1>MINECRAFT • DISCORD •</h1>
-<h1 class="web">WEB DEVELOPER</h1>
+<section>
+  <div class="section-title">
+    <h2>SKILLS & <span>TECHNOLOGIES</span></h2>
+  </div>
 
-<div class="subtitle">
-Java • Spigot • Discord Bots • Modern Web Apps
-</div>
+  <div class="grid">
+    <div class="card">
+      <h3>🛠 Minecraft</h3>
+      <p>Spigot / Paper API<br>BungeeCord<br>Velocity<br>NMS<br>ProtocolLib</p>
+    </div>
 
-<a href="#skills" class="btn btn-primary">VIEW PROJECTS</a>
-<a href="contact.html" class="btn btn-outline">CONTACT</a>
+    <div class="card">
+      <h3>🤖 Discord</h3>
+      <p>Discord.js<br>JDA<br>Lavalink<br>Slash Commands<br>Buttons</p>
+    </div>
 
-</div>
+    <div class="card">
+      <h3>🌐 Web Development</h3>
+      <p>HTML • CSS • JavaScript<br>Responsive UI</p>
+    </div>
 
-<div class="section" id="skills">
-<h2>Skills & Technology</h2>
+  </div>
+</section>
 
-<div class="card">
-<h3>Minecraft</h3>
-<p>Server Setup • Plugin Optimization • Performance Tuning</p>
-</div>
+<!-- WHY CHOOSE ME -->
+<section id="why">
+  <div class="section-title">
+    <h2>WHY <span>CHOOSE ME</span></h2>
+  </div>
 
-<div class="card">
-<h3>Web Development</h3>
-<p>HTML • CSS • Java</p>
-</div>
+  <div class="grid" style="margin-top:40px;">
+    <div class="card">
+      <h3>⚡ Expertise</h3>
+      <p>
+        I have created many servers with my own hands, 
+        I have experience in creating servers, 
+        I can even create a Discord server.
+      </p>
+    </div>
 
-</div>
+    <div class="card">
+      <h3>💡 Creativity</h3>
+      <p>
+        I am able to create a very unique Minecraft server. 
+        I created 6 survivals in a single server. 
+        I even added many plugins like VK Mace, Guns, Modern Life etc. in the server.
+      </p>
+    </div>
 
-<div class="section">
-<h2>Why Choose Me</h2>
+    <div class="card">
+      <h3>🛠 Quality</h3>
+      <p>
+        Clean, maintainable code and high-performance systems  
+        ensure your projects run smooth and reliable.
+      </p>
+    </div>
 
-<div class="card">
-✔ Clean & Optimized Systems<br><br>
-✔ Professional Design & Coding<br><br>
-✔ Fast Communication<br><br>
-✔ Reliable Developer
-</div>
+    <div class="card">
+      <h3>🤝 Reliability</h3>
+      <p>
+        Professional communication, timely delivery,  
+        and client satisfaction guaranteed.
+        We provide you with a clean look, 
+        better service and a clean Minecraft and Discord server.
+      </p>
+    </div>
+  </div>
+</section>
 
-</div>
+<section id="projects">
+  <div class="section-title">
+    <h2>MY <span>PROJECTS</span></h2>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>MC Server Setup</h3>
+      <p>Premium Discord server.This is a discord server created by me, 
+        in this you will get to see a complete clean look, 
+        here you will get to see per voice, 
+        chatting, tickets, staff chat, admins area, you will get to see all this.</p>
+    </div>
+    <div class="card">
+      <h3>Ultimate Rivals</h3>
+      <p>SMP mechanics, performance tuning & best plugins.
+         With custom systems & optimizations.</p>
+    </div>
+    <div class="card">
+      <h3>RockRivals</h3>
+      <p>Events, Bedwars setup, PvP systems, LifeSteal and Modded Survial.</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact-cta">
+  <h2>Let’s Work Together</h2>
+  <p class="contact-text">
+    Want to discuss a project or collaboration?<br>
+    Feel free to reach out.
+  </p>
+
+  <div class="contact-links">
+    <a href="mailto:anshjidiscord12@gmail@gmail.com">Email</a>
+    <a href="https://discord.gg/XwCtnG8R" target="_blank">Discord</a>
+    <a href="https://github.com/RockyJi-IN/" target="_blank">GitHub</a>
+  </div>
+</section>
+
+<footer>
+  © 2026 RockyJi — Developer
+</footer>
 
 </body>
-</html>
+  </html>
