@@ -9,18 +9,31 @@
 
 body{
 margin:0;
-font-family:Arial;
-background:radial-gradient(circle at center,#07162b,#000814);
+font-family:Arial, sans-serif;
+background:#070b1a;
 color:white;
-scroll-behavior:smooth;
+overflow-x:hidden;
 }
 
-.top-name{
+/* Stars background */
+body::before{
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+background-image:radial-gradient(#00f2ff 1px, transparent 1px);
+background-size:40px 40px;
+opacity:0.15;
+z-index:-1;
+}
+
+/* Top Left Name */
+.logo{
 position:fixed;
 top:20px;
-right:40px;
-color:#00f2ff;
+left:30px;
 font-weight:bold;
+color:#00f2ff;
 font-size:20px;
 }
 
@@ -33,46 +46,67 @@ align-items:center;
 text-align:center;
 }
 
+.status{
+border:1px solid #00f2ff;
+padding:8px 20px;
+border-radius:20px;
+margin-bottom:30px;
+color:#00f2ff;
+font-size:14px;
+}
+
 .hero h1{
 font-size:50px;
-margin-bottom:30px;
+margin:10px 0;
 }
 
 .web{
-color:#9d00ff;
+color:#a855f7;
+text-shadow:0 0 20px #a855f7;
+}
+
+.subtitle{
+opacity:0.7;
+margin-bottom:30px;
 }
 
 .btn{
 padding:12px 35px;
-border-radius:30px;
-border:none;
+border-radius:8px;
 font-weight:bold;
 margin:10px;
 cursor:pointer;
 text-decoration:none;
 display:inline-block;
-background:linear-gradient(45deg,#00f2ff,#9d00ff);
-color:white;
 transition:0.3s;
 }
 
+.btn-primary{
+background:linear-gradient(45deg,#00f2ff,#a855f7);
+color:black;
+}
+
+.btn-outline{
+border:1px solid #00f2ff;
+color:#00f2ff;
+}
+
 .btn:hover{
-transform:translateY(-5px);
-box-shadow:0 0 20px #00f2ff;
+transform:translateY(-4px);
 }
 
 .section{
-padding:80px 20px;
+padding:100px 20px;
 text-align:center;
 }
 
 .card{
-background:rgba(255,255,255,0.05);
+background:#0f172a;
+border:1px solid #00f2ff30;
 padding:30px;
-margin:20px auto;
-max-width:500px;
 border-radius:15px;
-border:1px solid #00f2ff;
+max-width:500px;
+margin:20px auto;
 }
 
 </style>
@@ -80,13 +114,22 @@ border:1px solid #00f2ff;
 
 <body>
 
-<div class="top-name">Rocky Ji</div>
+<div class="logo">⚡ Rocky Ji</div>
 
 <div class="hero">
-<h1>Minecraft • Discord • <span class="web">Web Developer</span></h1>
 
-<a href="#skills" class="btn">View Skills</a>
-<a href="contact.html" class="btn">Contact</a>
+<div class="status">SYSTEM STATUS : ONLINE</div>
+
+<h1>MINECRAFT • DISCORD •</h1>
+<h1 class="web">WEB DEVELOPER</h1>
+
+<div class="subtitle">
+Java • Spigot • Discord Bots • Modern Web Apps
+</div>
+
+<a href="#skills" class="btn btn-primary">VIEW PROJECTS</a>
+<a href="contact.html" class="btn btn-outline">CONTACT</a>
+
 </div>
 
 <div class="section" id="skills">
@@ -94,7 +137,7 @@ border:1px solid #00f2ff;
 
 <div class="card">
 <h3>Minecraft</h3>
-<p>Server Setup, Plugin Optimization, Performance Tuning</p>
+<p>Server Setup • Plugin Optimization • Performance Tuning</p>
 </div>
 
 <div class="card">
