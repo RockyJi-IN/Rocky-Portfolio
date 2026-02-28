@@ -3,29 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ansh Ji | Minecraft & Web Developer</title>
+<title>Ansh Ji | Developer</title>
 
 <style>
 
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #001f3f, #000814);
+  background: radial-gradient(circle at center, #0a0f1c, #000814);
   color: white;
-  scroll-behavior: smooth;
 }
 
-/* Top Right Name */
 .top-name {
   position: fixed;
   top: 20px;
   right: 40px;
   font-weight: bold;
   font-size: 18px;
-  color: white;
+  color: #00f2ff;
 }
 
-/* Hero Section */
 .hero {
   height: 100vh;
   display: flex;
@@ -36,28 +33,31 @@ body {
 }
 
 .hero h1 {
-  font-size: 42px;
-  margin-bottom: 30px;
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  color: #9d00ff;
 }
 
 .btn {
-  display: inline-block;
-  padding: 12px 28px;
+  padding: 12px 30px;
+  margin: 10px;
   border-radius: 30px;
-  background: linear-gradient(45deg, #00f2ff, #9d00ff);
-  color: white;
   text-decoration: none;
   font-weight: bold;
-  margin: 10px;
-  transition: 0.3s ease;
+  display: inline-block;
+  background: linear-gradient(45deg, #00f2ff, #9d00ff);
+  color: white;
+  transition: 0.3s;
 }
 
 .btn:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  box-shadow: 0 0 20px #00f2ff;
 }
 
-/* Section */
 .section {
   padding: 80px 20px;
   text-align: center;
@@ -65,17 +65,16 @@ body {
 
 .section h2 {
   margin-bottom: 40px;
-  font-size: 30px;
+  font-size: 32px;
 }
 
-/* Cards */
 .card {
   background: rgba(255,255,255,0.05);
   padding: 20px;
   margin: 20px auto;
   max-width: 500px;
   border-radius: 15px;
-  backdrop-filter: blur(10px);
+  border: 1px solid #00f2ff;
   transition: 0.3s;
 }
 
@@ -83,13 +82,10 @@ body {
   transform: translateY(-5px);
 }
 
-a {
-  color: #00f2ff;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+footer {
+  text-align: center;
+  padding: 20px;
+  opacity: 0.6;
 }
 
 </style>
@@ -98,56 +94,42 @@ a:hover {
 
 <div class="top-name">Ansh Ji</div>
 
-<!-- Hero -->
 <div class="hero">
-  <h1>Minecraft & Discord Developer</h1>
-  <a href="#skills" class="btn">My Skills</a>
-  <a href="#contact" class="btn">Contact Me</a>
+  <h1>Minecraft • Discord • <span class="highlight">Web Developer</span></h1>
+  <a href="#skills" class="btn">View Skills</a>
+  <a href="contact.html" class="btn">Contact</a>
 </div>
 
-<!-- Skills & Technologies -->
 <div class="section" id="skills">
   <h2>Skills & Technologies</h2>
 
   <div class="card">
     <h3>Minecraft</h3>
-    <p>Server Setup, Plugin Configuration, Optimization</p>
+    <p>Server Setup, Plugin Optimization, Performance Tuning</p>
   </div>
 
   <div class="card">
     <h3>Web Development</h3>
-    <p>HTML, CSS, Java</p>
+    <p>HTML • CSS • Java</p>
   </div>
 </div>
 
-<!-- Why Choose Me -->
 <div class="section">
   <h2>Why Choose Me</h2>
 
   <div class="card">
     <p>
-      ✔ Professional Minecraft Server Optimization<br>
-      ✔ Clean & Responsive Web Development<br>
-      ✔ Fast Support & Friendly Communication<br>
-      ✔ Reliable and Dedicated Developer
+      ✔ Clean & Optimized Systems<br><br>
+      ✔ Professional Design & Coding<br><br>
+      ✔ Fast Communication<br><br>
+      ✔ Reliable & Dedicated Developer
     </p>
   </div>
 </div>
 
-<!-- Contact -->
-<div class="section" id="contact">
-  <h2>Contact Me</h2>
-
-  <p>Email: 
-    <a href="mailto:anshjidiscord12@gmail.com">
-      anshjidiscord12@gmail.com
-    </a>
-  </p>
-
-  <a href="https://discord.gg/wmXMFdw7" target="_blank" class="btn">
-    Join My Discord
-  </a>
-</div>
+<footer>
+© 2026 Ansh Ji — Developer
+</footer>
 
 </body>
 </html>
