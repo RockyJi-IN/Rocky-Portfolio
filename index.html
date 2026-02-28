@@ -1,152 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Rocky | Developer</title>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ansh Ji | Minecraft & Web Developer</title>
+
 <style>
 
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: url("https://images.unsplash.com/photo-1518770660439-4636190af475") no-repeat center center/cover;
+  background: linear-gradient(135deg, #001f3f, #000814);
+  color: white;
+  scroll-behavior: smooth;
+}
+
+/* Top Right Name */
+.top-name {
+  position: fixed;
+  top: 20px;
+  right: 40px;
+  font-weight: bold;
+  font-size: 18px;
   color: white;
 }
 
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Hero Glow Effect */
+/* Hero Section */
 .hero {
-  position: relative;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(0,255,255,0.35), transparent 70%);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: -1;
-  filter: blur(40px);
-}
-.hero {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
 }
-#contact a:hover {
-  color: #00ffcc;
+
+.hero h1 {
+  font-size: 42px;
+  margin-bottom: 30px;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-body{
-margin:0;
-font-family:Arial, sans-serif;
-background: linear-gradient(135deg,#0f172a,#020617);
-color:white;
-text-align:center;
-}
-
-h1 {
-  font-size: 48px;
-  font-weight: 700;
-}
-
-.highlight{
-background: linear-gradient(45deg,#00ffff,#a020f0);
--webkit-background-clip:text;
-color:transparent;
-}
-
-.btn {
-  padding: 12px 28px;
-  border-radius: 30px;
-  background: linear-gradient(45deg, #00f2ff, #9d00ff);
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s ease;
-}
-
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-}
-.btn {
-  margin: 10px;
-}
-
-.section {
-  padding: 100px 20px;
-}
-
-.card{
-display:inline-block;
-background:rgba(255,255,255,0.05);
-backdrop-filter: blur(10px);
-padding:20px;
-margin:15px;
-width:260px;
-border-radius:15px;
-border:1px solid rgba(255,255,255,0.1);
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-12px) scale(1.05);
-box-shadow:0 0 25px #00ffff;
-}
-
-footer{
-margin-top:100px;
-padding:20px;
-background:#0f172a;
-}
-.profile-img {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  margin-top: 20px;
-  border: 3px solid #00ffff;
-  box-shadow: 0 0 20px #00ffff;
-  transition: 0.3s;
-}
-
-.profile-img {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #00f2ff;
-  box-shadow: 0 0 25px rgba(0,255,255,0.6);
-  margin: 20px 0;
-}
-#contact {
-  text-align: center;
-  padding: 80px 20px;
-}
-
-#contact h2 {
-  font-size: 32px;
-  margin-bottom: 15px;
-}
-
-#contact p {
-  font-size: 18px;
-  margin-bottom: 15px;
-}
 .btn {
   display: inline-block;
   padding: 12px 28px;
@@ -155,75 +48,106 @@ background:#0f172a;
   color: white;
   text-decoration: none;
   font-weight: bold;
+  margin: 10px;
   transition: 0.3s ease;
 }
 
 .btn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 20px rgba(0,255,255,0.6);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
-#contact a {
-  color: #00ffff;
+
+/* Section */
+.section {
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.section h2 {
+  margin-bottom: 40px;
+  font-size: 30px;
+}
+
+/* Cards */
+.card {
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 500px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+a {
+  color: #00f2ff;
   text-decoration: none;
 }
 
-#contact a:hover {
+a:hover {
   text-decoration: underline;
 }
+
 </style>
 </head>
-
 <body>
 
+<div class="top-name">Ansh Ji</div>
+
+<!-- Hero -->
 <div class="hero">
-  <h1>Hi, I'm <span class="highlight">Rocky</span></h1>
-  <img src="https://i.imgur.com/4Z7Z6FQ.png" class="profile-img">
-  <p><span id="typing"></span></p>
-  <a href="#projects" class="btn">View Projects</a>
+  <h1>Minecraft & Discord Developer</h1>
+  <a href="#skills" class="btn">My Skills</a>
   <a href="#contact" class="btn">Contact Me</a>
 </div>
 
-<div class="section" id="projects">
-  <h2>My Projects</h2>
+<!-- Skills & Technologies -->
+<div class="section" id="skills">
+  <h2>Skills & Technologies</h2>
 
-<div class="card">
-<h3>SMP Server Setup</h3>
-<p>Optimized Minecraft survival server with plugins.</p>
+  <div class="card">
+    <h3>Minecraft</h3>
+    <p>Server Setup, Plugin Configuration, Optimization</p>
+  </div>
+
+  <div class="card">
+    <h3>Web Development</h3>
+    <p>HTML, CSS, Java</p>
+  </div>
 </div>
 
-<div class="card">
-<h3>Custom Discord Bot</h3>
-<p>Moderation + Economy + Ticket system bot.</p>
+<!-- Why Choose Me -->
+<div class="section">
+  <h2>Why Choose Me</h2>
+
+  <div class="card">
+    <p>
+      ✔ Professional Minecraft Server Optimization<br>
+      ✔ Clean & Responsive Web Development<br>
+      ✔ Fast Support & Friendly Communication<br>
+      ✔ Reliable and Dedicated Developer
+    </p>
+  </div>
 </div>
 
-<div class="card">
-<h3>Plugin Configuration</h3>
-<p>Advanced Minecraft plugin setup & tuning.</p>
-</div>
-
+<!-- Contact -->
 <div class="section" id="contact">
-<h2>Contact Me</h2>
-<p>Email: <a href="mailto:anshjidiscord12@gmail.com" style="color:#00ffff;">anshjidiscord12@gmail.com</a></p>
-<a href="https://discord.gg/wmXMFdw7" target="_blank" class="btn">
-Join My Discord
-</a>
+  <h2>Contact Me</h2>
+
+  <p>Email: 
+    <a href="mailto:anshjidiscord12@gmail.com">
+      anshjidiscord12@gmail.com
+    </a>
+  </p>
+
+  <a href="https://discord.gg/wmXMFdw7" target="_blank" class="btn">
+    Join My Discord
+  </a>
 </div>
-<footer>
-<p>© 2026 Rocky | Open For Work</p>
-</footer>
-<script>
-const text = "Minecraft & Discord Developer";
-let index = 0;
 
-function typeEffect() {
-  if (index < text.length) {
-    document.getElementById("typing").innerHTML += text.charAt(index);
-    index++;
-    setTimeout(typeEffect, 70);
-  }
-}
-
-typeEffect();
-</script>
 </body>
-</html> 
+</html>
