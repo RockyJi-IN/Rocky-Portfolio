@@ -5,6 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #000428);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
+  color: white;
+  overflow-x: hidden;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Hero Glow Effect */
+.hero {
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0,255,255,0.35), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  filter: blur(40px);
+}
 #contact a:hover {
   color: #00ffcc;
 }
@@ -130,11 +163,13 @@ background:#0f172a;
 
 <body>
 
-<h1>Hi, I'm <span class="highlight">Rocky</span></h1>
-<img src="https://i.imgur.com/4Z7Z6FQ.png" class="profile-img">
-<p><span id="typing"></span></p>
-<button class="btn">View Projects</button>
-<button class="btn">Contact Me</button>
+<div class="hero">
+  <h1>Hi, I'm <span class="highlight">Rocky</span></h1>
+  <img src="https://i.imgur.com/4Z7Z6FQ.png" class="profile-img">
+  <p><span id="typing"></span></p>
+  <button class="btn">View Projects</button>
+  <button class="btn">Contact Me</button>
+</div>
 
 <div class="section">
 <h2>My Projects</h2>
