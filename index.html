@@ -4,8 +4,13 @@
 <title>Rocky | Developer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-html{
-scroll-behavior: smooth;
+
+#contact a:hover {
+  color: #00ffcc;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 body{
 margin:0;
@@ -26,20 +31,21 @@ background: linear-gradient(45deg,#00ffff,#a020f0);
 color:transparent;
 }
 
-.btn{
-padding:12px 30px;
-margin:10px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-size:16px;
-color:white;
-background:linear-gradient(45deg,#00ffff,#a020f0);
-transition:0.3s;
+.btn {
+  padding: 12px 30px;
+  margin: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  background: linear-gradient(45deg, #00ffff, #a020f0);
+  transition: 0.3s;
 }
 
-.btn:hover{
-transform:scale(1.1);
+.btn:hover {
+  box-shadow: 0 0 15px #00ffff;
+  transform: scale(1.05);
 }
 
 .section{
@@ -68,12 +74,27 @@ margin-top:100px;
 padding:20px;
 background:#0f172a;
 }
+.profile-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-top: 20px;
+  border: 3px solid #00ffff;
+  box-shadow: 0 0 20px #00ffff;
+  transition: 0.3s;
+}
+
+.profile-img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px #00ffff;
+}
 </style>
 </head>
 
 <body>
 
 <h1>Hi, I'm <span class="highlight">Rocky</span></h1>
+<img src="https://i.imgur.com/4Z7Z6FQ.png" class="profile-img">
 <p><span id="typing"></span></p>
 <button class="btn">View Projects</button>
 <button class="btn">Contact Me</button>
@@ -99,7 +120,7 @@ background:#0f172a;
 </div>
 <div class="section" id="contact">
 <h2>Contact Me</h2>
-<p>Email: <a href="mailto:rocky@example.com" style="color:#00ffff;">rocky@example.com</a></p>
+<p>Email: <a href="mailto:anshjidiscord12@gmail.com" style="color:#00ffff;">anshjidiscord12@gmail.com</a></p>
 <p>Discord: Rocky#0001</p>
 </div>
 <footer>
