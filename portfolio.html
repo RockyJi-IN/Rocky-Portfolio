@@ -1,0 +1,809 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ansh P. — AI Prompt Writer & Content Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #18181f;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00e5a0;
+    --accent2: #7b61ff;
+    --accent3: #ff6b6b;
+    --text: #f0f0f8;
+    --muted: #7070a0;
+    --card: #13131c;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(0,229,160,0.4);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.35;
+  }
+
+  /* === HERO === */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 70% 60% at 80% 20%, rgba(0,229,160,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 10% 80%, rgba(123,97,255,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(255,107,107,0.04) 0%, transparent 60%);
+  }
+
+  /* Animated grid */
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.25);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    width: fit-content;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(56px, 10vw, 120px);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero-name .highlight {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--accent);
+  }
+
+  .hero-tagline {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(20px, 3vw, 32px);
+    color: var(--muted);
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-tagline span { color: var(--text); }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px; left: 60px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: fadeUp 0.6s 0.6s ease both;
+  }
+
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--muted);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--accent);
+    transform: translateX(-100%);
+    animation: scanline 2s infinite;
+  }
+
+  @keyframes scanline {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  /* === SECTIONS === */
+  .section {
+    padding: 80px 60px;
+    position: relative;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 60px;
+  }
+
+  /* === SERVICES === */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .service-card {
+    background: var(--card);
+    padding: 40px;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover { background: var(--surface2); }
+
+  .service-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+
+  .service-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .service-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 20px;
+  }
+
+  .tag {
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* === SKILLS / TOOLS === */
+  .tools-section { background: var(--surface); }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .tool-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.25s;
+  }
+
+  .tool-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,229,160,0.08);
+  }
+
+  .tool-icon { font-size: 22px; }
+
+  .tool-name {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  /* === PROCESS === */
+  .process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 30px;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+    transition: all 0.3s;
+  }
+
+  .step:hover .step-num { color: var(--accent); }
+
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+    transition: color 0.3s;
+  }
+
+  .step-content {}
+
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-top: 8px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.75;
+    max-width: 560px;
+  }
+
+  /* === WHY ME === */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .why-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.3s;
+  }
+
+  .why-card:hover {
+    border-color: rgba(123,97,255,0.4);
+    box-shadow: 0 0 30px rgba(123,97,255,0.07);
+  }
+
+  .why-card.featured {
+    grid-column: span 2;
+    background: linear-gradient(135deg, rgba(0,229,160,0.06), rgba(123,97,255,0.06));
+    border-color: rgba(0,229,160,0.2);
+  }
+
+  .why-emoji { font-size: 28px; margin-bottom: 16px; }
+
+  .why-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .why-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* === CTA === */
+  .cta-section {
+    background: var(--surface);
+    text-align: center;
+    padding: 100px 60px;
+  }
+
+  .cta-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    line-height: 1;
+  }
+
+  .cta-sub {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #000;
+    padding: 16px 36px;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: none;
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(0,229,160,0.4);
+  }
+
+  /* === FOOTER === */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .footer-handle {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Floating orb */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .hero, .section { padding: 60px 24px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .why-card.featured { grid-column: span 1; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .footer-note { text-align: center; }
+    .cta-section { padding: 80px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-bg"></div>
+  <div class="orb" style="width:500px;height:500px;background:rgba(0,229,160,0.06);top:-100px;right:-100px;"></div>
+
+  <div class="badge">Available for Projects</div>
+
+  <h1 class="hero-name">
+    Ansh<br>
+    <span class="highlight">P.</span>
+  </h1>
+
+  <p class="hero-tagline">
+    <span>AI Prompt Engineer</span> & Content Architect
+  </p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-val">100%</span>
+      <span class="stat-label">On-Time Delivery</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">Fast</span>
+      <span class="stat-label">Turnaround</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">AI-First</span>
+      <span class="stat-label">Approach</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section reveal">
+  <div class="section-label">What I Do</div>
+  <h2 class="section-title">Services I Offer</h2>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon" style="background:rgba(0,229,160,0.1);">🎯</div>
+      <h3 class="service-title">AI Prompt Engineering</h3>
+      <p class="service-desc">Crafting high-precision prompts that unlock the full potential of AI tools — from ChatGPT and Claude to Midjourney and beyond. Every prompt is tested, refined, and optimized for maximum output quality.</p>
+      <div class="service-tags">
+        <span class="tag" style="background:rgba(0,229,160,0.1);color:var(--accent);">ChatGPT</span>
+        <span class="tag" style="background:rgba(0,229,160,0.1);color:var(--accent);">Claude</span>
+        <span class="tag" style="background:rgba(0,229,160,0.1);color:var(--accent);">Gemini</span>
+        <span class="tag" style="background:rgba(0,229,160,0.1);color:var(--accent);">Midjourney</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon" style="background:rgba(123,97,255,0.1);">✍️</div>
+      <h3 class="service-title">AI Content Editing</h3>
+      <p class="service-desc">Transforming raw AI-generated content into polished, human-sounding copy. I fix tone, fix structure, remove repetition, and make sure the final output reads as if a real expert wrote it.</p>
+      <div class="service-tags">
+        <span class="tag" style="background:rgba(123,97,255,0.1);color:var(--accent2);">Blog Posts</span>
+        <span class="tag" style="background:rgba(123,97,255,0.1);color:var(--accent2);">Articles</span>
+        <span class="tag" style="background:rgba(123,97,255,0.1);color:var(--accent2);">Copywriting</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon" style="background:rgba(255,107,107,0.1);">⚡</div>
+      <h3 class="service-title">Prompt Templates & Kits</h3>
+      <p class="service-desc">Building custom prompt libraries and template kits tailored to your business needs — reusable, scalable prompt systems that save you hours every week.</p>
+      <div class="service-tags">
+        <span class="tag" style="background:rgba(255,107,107,0.1);color:var(--accent3);">Marketing</span>
+        <span class="tag" style="background:rgba(255,107,107,0.1);color:var(--accent3);">E-Commerce</span>
+        <span class="tag" style="background:rgba(255,107,107,0.1);color:var(--accent3);">SaaS</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon" style="background:rgba(0,229,160,0.1);">🔍</div>
+      <h3 class="service-title">Content QA & Fact Checks</h3>
+      <p class="service-desc">Reviewing AI outputs for accuracy, coherence, and brand consistency. Your content will be clear, credible, and ready to publish without the usual AI hallucination risks.</p>
+      <div class="service-tags">
+        <span class="tag" style="background:rgba(0,229,160,0.1);color:var(--accent);">Proofreading</span>
+        <span class="tag" style="background:rgba(0,229,160,0.1);color:var(--accent);">Fact-Check</span>
+        <span class="tag" style="background:rgba(0,229,160,0.1);color:var(--accent);">SEO Review</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="section tools-section reveal">
+  <div class="section-label">My Stack</div>
+  <h2 class="section-title">AI Tools I Master</h2>
+
+  <div class="tools-grid">
+    <div class="tool-item"><span class="tool-icon">🤖</span><span class="tool-name">ChatGPT / GPT-4o</span></div>
+    <div class="tool-item"><span class="tool-icon">⚡</span><span class="tool-name">Claude (Anthropic)</span></div>
+    <div class="tool-item"><span class="tool-icon">🌟</span><span class="tool-name">Google Gemini</span></div>
+    <div class="tool-item"><span class="tool-icon">🎨</span><span class="tool-name">Midjourney</span></div>
+    <div class="tool-item"><span class="tool-icon">🖼️</span><span class="tool-name">DALL·E 3</span></div>
+    <div class="tool-item"><span class="tool-icon">📝</span><span class="tool-name">Jasper AI</span></div>
+    <div class="tool-item"><span class="tool-icon">✨</span><span class="tool-name">Copy.ai</span></div>
+    <div class="tool-item"><span class="tool-icon">🔥</span><span class="tool-name">Perplexity AI</span></div>
+    <div class="tool-item"><span class="tool-icon">📊</span><span class="tool-name">Notion AI</span></div>
+    <div class="tool-item"><span class="tool-icon">🚀</span><span class="tool-name">Stable Diffusion</span></div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section reveal">
+  <div class="section-label">How I Work</div>
+  <h2 class="section-title">My Process</h2>
+
+  <div class="process-steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <h3 class="step-title">Understand Your Goal</h3>
+        <p class="step-desc">I start by deeply understanding what you need — your target audience, tone, platform, and desired outcome. No assumptions, just clear communication from day one.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <h3 class="step-title">Craft & Engineer</h3>
+        <p class="step-desc">I design prompts or edit content with precision — structuring logic, context, and constraints so the AI produces exactly what you need, not a watered-down version of it.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <h3 class="step-title">Test & Iterate</h3>
+        <p class="step-desc">Every prompt gets tested across multiple runs. I refine based on output quality — removing vagueness, boosting specificity, until the result is consistently excellent.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <h3 class="step-title">Deliver & Support</h3>
+        <p class="step-desc">You receive a clean, ready-to-use deliverable with clear documentation. I stay available for revisions and make sure you're 100% satisfied before we close.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY ME -->
+<section class="section tools-section reveal">
+  <div class="section-label">Why Choose Me</div>
+  <h2 class="section-title">What Sets Me Apart</h2>
+
+  <div class="why-grid">
+    <div class="why-card featured">
+      <div class="why-emoji">🎯</div>
+      <h3 class="why-title">Prompt Engineering is a Skill — Not a Shortcut</h3>
+      <p class="why-desc">Anyone can type into ChatGPT. But getting consistently high-quality, on-brand, accurate results requires understanding model behavior, crafting precise instructions, and knowing how to handle edge cases. That's what I specialize in — turning AI from a hit-or-miss tool into a reliable production engine for your business.</p>
+    </div>
+
+    <div class="why-card">
+      <div class="why-emoji">⚡</div>
+      <h3 class="why-title">Fast Delivery</h3>
+      <p class="why-desc">I respect your time. Most projects are delivered ahead of schedule — never at the cost of quality.</p>
+    </div>
+
+    <div class="why-card">
+      <div class="why-emoji">💬</div>
+      <h3 class="why-title">Clear Communication</h3>
+      <p class="why-desc">No ghosting. No confusion. I keep you updated at every step and respond promptly to messages.</p>
+    </div>
+
+    <div class="why-card">
+      <div class="why-emoji">🔄</div>
+      <h3 class="why-title">Revisions Until Right</h3>
+      <p class="why-desc">Your satisfaction matters. I offer revisions to make sure the output truly meets your expectations.</p>
+    </div>
+
+    <div class="why-card">
+      <div class="why-emoji">🇮🇳</div>
+      <h3 class="why-title">India-Based, Global Mindset</h3>
+      <p class="why-desc">Flexible timezone availability and a global understanding of content standards across industries.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <h2 class="cta-title">Let's Build<br><span style="color:var(--accent);">Something Great</span></h2>
+  <p class="cta-sub">Have a project that needs sharp AI prompts or polished AI content? Let's connect and make it happen — fast.</p>
+  <a href="#" class="btn-primary">
+    Hire Me on Freelancer
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-name">Ansh P.</div>
+    <div class="footer-handle">@RockyJi12 · Freelancer.com</div>
+  </div>
+  <div class="footer-note">
+    AI Prompt Writer & Content Editor<br>
+    <span style="color:var(--accent);">Available Now</span>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  document.querySelectorAll('a, button, .service-card, .tool-item, .why-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      ring.style.width = '52px';
+      ring.style.height = '52px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
