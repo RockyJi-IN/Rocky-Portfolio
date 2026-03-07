@@ -1,295 +1,981 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>RockyJi | Developer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>RockyJi | Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Segoe UI,sans-serif
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #08080e;
+  --surface: #0f0f18;
+  --surface2: #16161f;
+  --border: rgba(255,255,255,0.06);
+  --accent: #00e5a0;
+  --accent2: #7b61ff;
+  --accent3: #ff6b6b;
+  --text: #eeeef8;
+  --muted: #6868a0;
+  --card: #111119;
 }
-body{
-  background:radial-gradient(circle at top,#0f0f1a,#05050a);
-  color:#fff;
-  overflow-x:hidden
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  overflow-x: hidden;
+  cursor: none;
 }
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
+
+/* ── CURSOR ── */
+.cursor {
+  width: 10px; height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .2s, height .2s, background .2s;
+  mix-blend-mode: screen;
+}
+.cursor-ring {
+  width: 34px; height: 34px;
+  border: 1.5px solid rgba(0,229,160,0.35);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: all .15s ease;
+}
+body:hover .cursor { opacity: 1; }
+
+/* ── NOISE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 1000; opacity: .3;
+}
+
+/* ── SCANLINE ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  pointer-events: none; z-index: 999;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background: rgba(8,8,14,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 20px;
+  color: var(--accent);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  transition: color .25s;
+  cursor: none;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: .1em;
+}
+.nav-status::before {
+  content: '';
+  width: 7px; height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 120px 60px 80px;
+  position: relative; overflow: hidden;
+}
+.hero-grid {
+  position: absolute; inset: 0;
   background-image:
-    radial-gradient(#00ffe1 1px,transparent 1px),
-    radial-gradient(#a855f7 1px,transparent 1px);
-  background-size:80px 80px;
-  opacity:.15;
-  animation:move 20s linear infinite;
-  z-index:-1
+    linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 20%, transparent 80%);
 }
-@keyframes move{
-  from{background-position:0 0,40px 40px}
-  to{background-position:400px 400px,440px 440px}
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
 }
-header{
-  padding:20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center
+
+.system-line {
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 24px;
+  animation: fadeUp .5s ease both;
 }
-.logo{
-  font-weight:700;
-  color:#00ffe1;
-  text-shadow:0 0 12px #00ffe1
+.system-line::before {
+  content: '▶';
+  font-size: 8px;
+  animation: blink 1.5s infinite;
 }
-.hero{
-  padding:60px 20px;
-  text-align:center
+
+.hero-name {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(64px, 12vw, 140px);
+  font-weight: 800;
+  line-height: .88;
+  letter-spacing: -.04em;
+  margin-bottom: 10px;
+  animation: fadeUp .5s .08s ease both;
 }
-.status{
-  display:inline-block;
-  padding:6px 14px;
-  border:1px solid #00ffe1;
-  border-radius:20px;
-  color:#00ffe1;
-  margin-bottom:20px
+.hero-name .outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(0,229,160,0.7);
 }
-.hero h1{
-  font-size:32px;
-  margin:20px 0
+.hero-sub {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: clamp(18px, 2.5vw, 28px);
+  color: var(--muted);
+  margin-bottom: 48px;
+  animation: fadeUp .5s .16s ease both;
 }
-.hero h1 span{
-  color:#a855f7;
-  text-shadow:0 0 12px #a855f7
+.hero-sub span { color: var(--text); }
+
+.hero-tags {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  animation: fadeUp .5s .24s ease both;
+  margin-bottom: 56px;
 }
-.hero p{
-  opacity:.8;
-  margin-bottom:30px
+.htag {
+  font-size: 11px;
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+  letter-spacing: .08em;
+  transition: all .25s;
 }
-.buttons a{
-  padding:12px 22px;
-  margin:5px;
+.htag:hover { border-color: var(--accent); color: var(--accent); }
+
+.hero-btns {
+  display: flex; gap: 16px;
+  animation: fadeUp .5s .32s ease both;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 32px;
+  border-radius: 6px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  text-decoration: none;
+  cursor: none;
+  transition: all .3s;
+  border: none;
+}
+.btn-solid {
+  background: var(--accent); color: #000;
+}
+.btn-solid:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,229,160,0.35);
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.scroll-cue {
+  position: absolute; bottom: 40px; left: 60px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 10px; color: var(--muted);
+  letter-spacing: .15em; text-transform: uppercase;
+  animation: fadeUp .5s .5s ease both;
+}
+.scroll-bar {
+  width: 36px; height: 1px;
+  background: var(--muted); overflow: hidden;
+}
+.scroll-bar::after {
+  content: '';
+  display: block; width: 100%; height: 100%;
+  background: var(--accent);
+  transform: translateX(-100%);
+  animation: scan 2.5s infinite;
+}
+@keyframes scan { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+
+/* ── SECTIONS ── */
+section { padding: 100px 60px; }
+section.alt { background: var(--surface); }
+
+.sec-eyebrow {
+  font-size: 10px; letter-spacing: .25em;
+  text-transform: uppercase; color: var(--accent);
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.sec-eyebrow::before { content:''; width:20px; height:1px; background:var(--accent); }
+.sec-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(30px, 5vw, 52px);
+  font-weight: 700; line-height: 1.05;
+  letter-spacing: -.025em;
+  margin-bottom: 60px;
+}
+
+/* ── SKILLS ── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.skill-col {
+  background: var(--card);
+  padding: 40px;
+  transition: background .3s;
+  position: relative;
+}
+.skill-col::before {
+  content:''; position:absolute; top:0; left:0; right:0;
+  height: 2px;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .4s;
+}
+.skill-col:nth-child(1)::before { background: var(--accent); }
+.skill-col:nth-child(2)::before { background: var(--accent2); }
+.skill-col:nth-child(3)::before { background: var(--accent3); }
+.skill-col:hover::before { transform: scaleX(1); }
+.skill-col:hover { background: var(--surface2); }
+
+.skill-col-icon { font-size: 28px; margin-bottom: 20px; }
+.skill-col-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px; font-weight: 700;
+  margin-bottom: 20px;
+}
+.skill-list { list-style: none; }
+.skill-list li {
+  font-size: 13px; color: var(--muted);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+  transition: color .25s;
+}
+.skill-list li:last-child { border-bottom: none; }
+.skill-list li::before { content:'▸'; color: var(--accent); font-size: 9px; }
+.skill-col:hover .skill-list li { color: var(--text); }
+
+/* ── WHY CHOOSE ME ── */
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.why-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px;
+  transition: all .3s;
+  position: relative; overflow: hidden;
+}
+.why-card::after {
+  content:''; position:absolute;
+  inset:0; border-radius:14px;
+  background: linear-gradient(135deg, rgba(0,229,160,0.04), transparent);
+  opacity:0; transition: opacity .3s;
+}
+.why-card:hover { border-color: rgba(0,229,160,0.25); transform: translateY(-4px); }
+.why-card:hover::after { opacity:1; }
+.why-card.wide { grid-column: span 2; }
+.why-emoji { font-size:30px; margin-bottom:16px; }
+.why-title {
+  font-family:'Syne', sans-serif;
+  font-size:19px; font-weight:700;
+  margin-bottom:10px;
+}
+.why-desc { font-size:13px; color:var(--muted); line-height:1.75; }
+
+/* ── PROJECTS ── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px;
+  transition: all .3s;
+  position: relative; overflow: hidden;
+}
+.project-card:hover {
+  border-color: rgba(123,97,255,0.35);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(123,97,255,0.08);
+}
+.project-num {
+  font-family:'Syne', sans-serif;
+  font-size: 64px; font-weight: 800;
+  color: rgba(255,255,255,0.04);
+  line-height:1; margin-bottom:-10px;
+  transition: color .3s;
+}
+.project-card:hover .project-num { color: rgba(123,97,255,0.12); }
+.project-title {
+  font-family:'Syne', sans-serif;
+  font-size:22px; font-weight:700;
+  margin-bottom:12px;
+}
+.project-desc { font-size:13px; color:var(--muted); line-height:1.75; margin-bottom:20px; }
+.project-chips { display:flex; gap:8px; flex-wrap:wrap; }
+.chip {
+  font-size:10px; padding:4px 12px;
+  border-radius:4px; letter-spacing:.08em;
+  background: rgba(123,97,255,0.1);
+  color: var(--accent2);
+  text-transform:uppercase;
+}
+
+/* ── CONTACT MODAL ── */
+.modal-overlay {
+  position: fixed; inset:0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px);
+  z-index: 800;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s ease;
+}
+.modal-overlay.open { opacity:1; pointer-events: all; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid rgba(0,229,160,0.15);
+  border-radius: 20px;
+  padding: 52px;
+  width: min(580px, 90vw);
+  position: relative;
+  transform: translateY(30px) scale(.97);
+  transition: all .35s cubic-bezier(.16,1,.3,1);
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-overlay.open .modal {
+  transform: translateY(0) scale(1);
+}
+.modal-close {
+  position: absolute; top:20px; right:24px;
+  background: none; border: none;
+  color: var(--muted); font-size:22px;
+  cursor: none; transition: color .2s;
+  line-height: 1;
+}
+.modal-close:hover { color: var(--accent); }
+
+.modal-title {
+  font-family:'Syne', sans-serif;
+  font-size:32px; font-weight:800;
+  letter-spacing: -.02em;
+  margin-bottom: 8px;
+}
+.modal-sub { font-size:13px; color:var(--muted); margin-bottom:36px; line-height:1.6; }
+
+.form-row { margin-bottom:20px; }
+.form-label {
+  display:block;
+  font-size:10px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--muted);
+  margin-bottom:8px;
+}
+.form-input, .form-textarea {
+  width:100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius:8px;
+  padding:14px 18px;
+  color: var(--text);
+  font-family:'DM Mono', monospace;
+  font-size:14px;
+  transition: border-color .25s, box-shadow .25s;
+  outline: none; resize: none;
+}
+.form-input:focus, .form-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,229,160,0.08);
+}
+.form-textarea { min-height:130px; }
+
+.form-btn {
+  width:100%;
+  background: var(--accent); color:#000;
+  border:none; border-radius:8px;
+  padding:16px;
+  font-family:'Syne', sans-serif;
+  font-size:14px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase;
+  cursor:none; transition:all .3s;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.form-btn:hover {
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(0,229,160,0.3);
+}
+.form-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+
+.form-status {
+  margin-top:16px; text-align:center;
+  font-size:13px; display:none;
+  padding: 12px; border-radius: 8px;
+}
+.form-status.success {
+  display:block; color:var(--accent);
+  background: rgba(0,229,160,0.08);
+  border: 1px solid rgba(0,229,160,0.2);
+}
+.form-status.error {
+  display:block; color:var(--accent3);
+  background: rgba(255,107,107,0.08);
+  border: 1px solid rgba(255,107,107,0.2);
+}
+
+.modal-divider {
+  height:1px; background:var(--border);
+  margin: 36px 0;
+}
+.modal-links {
+  display:flex; gap:16px; justify-content:center;
+}
+.modal-link {
+  display:flex; align-items:center; gap:8px;
+  font-size:13px; color:var(--muted);
   text-decoration:none;
-  border-radius:6px;
-  font-weight:700
+  padding:10px 20px;
+  border:1px solid var(--border); border-radius:8px;
+  transition:all .25s; cursor:none;
 }
-.primary{
-  background:linear-gradient(90deg,#00ffe1,#a855f7);
-  color:#000
+.modal-link:hover { border-color:var(--accent); color:var(--accent); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 60px;
 }
-.secondary{
-  border:1px solid #00ffe1;
-  color:#00ffe1
-}
-section{
-  padding:60px 20px
-}
-.section-title{
-  text-align:center;
-  margin-bottom:30px
-}
-.section-title h2 span{
-  color:#00ffe1
-}
-.grid{
+.footer-inner {
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:40px;
+  margin-bottom: 48px;
 }
-.card{
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(0,255,225,.2);
-  padding:20px;
-  border-radius:14px;
-  backdrop-filter:blur(10px);
-  box-shadow:0 0 25px rgba(0,255,225,.08)
+.footer-brand .f-name {
+  font-family:'Syne', sans-serif;
+  font-size:28px; font-weight:800; color:var(--accent);
 }
-.card h3{
-  color:#00ffe1;
-  margin-bottom:10px
+.footer-brand .f-title {
+  font-size:12px; color:var(--muted); margin-top:6px; line-height:1.6;
 }
-.card p{
-  opacity:.85;
-  line-height:1.6
+.footer-col-title {
+  font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:20px;
+}
+.footer-links { list-style:none; }
+.footer-links li { margin-bottom:12px; }
+.footer-links a {
+  font-size:14px; color:var(--text);
+  text-decoration:none; transition:color .25s;
+  display:flex; align-items:center; gap:8px; cursor:none;
+}
+.footer-links a:hover { color:var(--accent); }
+.footer-links a .link-icon { font-size:16px; }
+.footer-bottom {
+  border-top:1px solid var(--border);
+  padding-top: 28px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.footer-copy { font-size:12px; color:var(--muted); }
+.footer-handle { font-size:12px; color:var(--muted); }
+
+/* ── REVEAL ── */
+.reveal {
+  opacity:0; transform:translateY(28px);
+  transition: all .7s cubic-bezier(.16,1,.3,1);
+}
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(22px); }
+  to { opacity:1; transform:translateY(0); }
 }
 
-/* CONTACT */
-.contact-cta{
-  text-align:center;
-  padding:80px 20px
-}
-.contact-text{
-  margin:15px 0 25px;
-  opacity:.8
-}
-.contact-links{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  flex-wrap:wrap
-}
-.contact-links a{
-  padding:12px 22px;
-  border-radius:10px;
-  text-decoration:none;
-  font-weight:700;
-  color:#000;
-  background:linear-gradient(90deg,#00ffe1,#a855f7);
-  box-shadow:0 0 18px rgba(0,255,225,.5);
-  transition:.3s
-}
-.contact-links a:hover{
-  transform:translateY(-4px);
-  box-shadow:0 0 30px rgba(168,85,247,.8)
-}
-
-footer{
-  text-align:center;
-  padding:30px;
-  opacity:.6
-}
-.top-logo {
-    width: 120px;
-    margin-bottom: 20px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+/* ── RESPONSIVE ── */
+@media(max-width:900px) {
+  nav { padding:16px 24px; }
+  .nav-links { display:none; }
+  .hero, section { padding:80px 24px; }
+  .skills-grid { grid-template-columns:1fr; }
+  .why-grid, .footer-inner { grid-template-columns:1fr; }
+  .why-card.wide { grid-column:span 1; }
+  footer { padding:40px 24px; }
+  .footer-bottom { flex-direction:column; gap:8px; text-align:center; }
+  .modal { padding:32px 24px; }
+  .modal-links { flex-direction:column; }
 }
 </style>
 </head>
-
 <body>
 
-<header>
-  <div class="logo">⚡RockyJi</div>
-</header>
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="ring"></div>
 
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <h2 class="modal-title">Let's Connect</h2>
+    <p class="modal-sub">Fill the form below — your message will land directly in my inbox. I usually reply within a few hours.</p>
+
+    <div class="form-row">
+      <label class="form-label" for="fname">Your Name</label>
+      <input class="form-input" type="text" id="fname" placeholder="John Doe" required>
+    </div>
+    <div class="form-row">
+      <label class="form-label" for="femail">Your Email</label>
+      <input class="form-input" type="email" id="femail" placeholder="you@example.com" required>
+    </div>
+    <div class="form-row">
+      <label class="form-label" for="fmsg">Message</label>
+      <textarea class="form-textarea" id="fmsg" placeholder="Tell me about your project..." required></textarea>
+    </div>
+    <button class="form-btn" id="sendBtn" onclick="sendEmail()">
+      <span id="btnText">Send Message</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M2 8H14M14 8L10 4M14 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="form-status" id="formStatus"></div>
+
+    <div class="modal-divider"></div>
+    <p style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;letter-spacing:.08em;">OR REACH ME DIRECTLY</p>
+    <div class="modal-links">
+      <a class="modal-link" href="mailto:anshjidiscord12@gmail.com">
+        <span>📧</span> Email Me
+      </a>
+      <a class="modal-link" href="https://discord.gg/XwCtnG8R" target="_blank">
+        <span>🎮</span> Discord
+      </a>
+      <a class="modal-link" href="https://github.com/RockyJi-IN/" target="_blank">
+        <span>💻</span> GitHub
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">⚡ RockyJi</a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#why">Why Me</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact-footer">Contact</a></li>
+  </ul>
+  <div class="nav-status">System Online 24/7</div>
+</nav>
+
+<!-- HERO -->
 <section class="hero">
-  <span class="status">SYSTEM STATUS : 24/7</span>
-  <h1>MINECRAFT  • <span>DISCORD</span></h1>
-  <p>Java • Spigot • Discord Bots • Modern Web Apps</p>
+  <div class="hero-grid"></div>
+  <div class="hero-glow" style="width:600px;height:600px;background:rgba(0,229,160,0.05);top:-150px;right:-100px;"></div>
+  <div class="hero-glow" style="width:400px;height:400px;background:rgba(123,97,255,0.06);bottom:-100px;left:-80px;"></div>
 
-  <div class="buttons">
-    <a href="#projects" class="primary">VIEW PROJECTS</a>
-    <a href="contact.html" class="secondary">CONTACT</a>
-  </div>
-</section>
-  
-<!-- EXPERIENCE / CLIENTS / PROJECTS COMPLETED -->
+  <p class="system-line">System Status : Online 24/7</p>
 
-<section>
-  <div class="section-title">
-    <h2>SKILLS & <span>TECHNOLOGIES</span></h2>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <h3>🛠 Minecraft</h3>
-      <p>Spigot / Paper API<br>BungeeCord<br>Velocity<br>NMS<br>ProtocolLib</p>
-    </div>
-
-    <div class="card">
-      <h3>🤖 Discord</h3>
-      <p>Discord.js<br>Slash Commands<br>Buttons</p>
-    </div>
-
-    <div class="card">
-      <h3>🌐 Web Development</h3>
-      <p>HTML • CSS • JavaScript<br>Responsive UI</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- WHY CHOOSE ME -->
-<section id="why">
-  <div class="section-title">
-    <h2>WHY <span>CHOOSE ME</span></h2>
-  </div>
-
-  <div class="grid" style="margin-top:40px;">
-    <div class="card">
-      <h3>⚡ Expertise</h3>
-      <p>
-        I have created many servers with my own hands, 
-        I have experience in creating servers, 
-        I can even create a Discord server.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>💡 Creativity</h3>
-      <p>
-        I am able to create a very unique Minecraft server. 
-        I created 6 survivals in a single server. 
-        I even added many plugins like VK Mace, Guns, Modern Life etc. in the server.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>🛠 Quality</h3>
-      <p>
-        Clean, maintainable code and high-performance systems  
-        ensure your projects run smooth and reliable.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>🤝 Reliability</h3>
-      <p>
-        Professional communication, timely delivery,  
-        and client satisfaction guaranteed.
-        We provide you with a clean look, 
-        better service and a clean Minecraft and Discord server.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section id="projects">
-  <div class="section-title">
-    <h2>MY <span>PROJECTS</span></h2>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <h3>MC Server Setup</h3>
-      <p>Premium Discord server.This is a discord server created by me, 
-        in this you will get to see a complete clean look, 
-        here you will get to see per voice, 
-        chatting, tickets, staff chat, admins area, you will get to see all this.</p>
-    </div>
-    <div class="card">
-      <h3>Ultimate Rivals</h3>
-      <p>SMP mechanics, performance tuning & best plugins.
-         With custom systems & optimizations.</p>
-    </div>
-    <div class="card">
-      <h3>RockRivals</h3>
-      <p>Events, Bedwars setup, PvP systems, LifeSteal and Modded Survial.</p>
-    </div>
-  </div>
-</section>
-
-<section class="contact-cta">
-  <h2>Let’s Work Together</h2>
-  <p class="contact-text">
-    Want to discuss a project or collaboration?<br>
-    Feel free to reach out.
+  <h1 class="hero-name">
+    Rocky<span class="outline">Ji</span>
+  </h1>
+  <p class="hero-sub">
+    <span>Developer</span> — Minecraft • Discord • Web
   </p>
 
-  <div class="contact-links">
-    <a href="mailto:anshjidiscord12@gmail@gmail.com">Email</a>
-    <a href="https://discord.gg/XwCtnG8R" target="_blank">Discord</a>
-    <a href="https://github.com/RockyJi-IN/" target="_blank">GitHub</a>
+  <div class="hero-tags">
+    <span class="htag">Java / Spigot</span>
+    <span class="htag">BungeeCord</span>
+    <span class="htag">Discord.js</span>
+    <span class="htag">Velocity</span>
+    <span class="htag">NMS</span>
+    <span class="htag">ProtocolLib</span>
+    <span class="htag">HTML / CSS / JS</span>
+  </div>
+
+  <div class="hero-btns">
+    <a href="#projects" class="btn btn-solid">View Projects ↓</a>
+    <button class="btn btn-outline" onclick="openModal()">Contact Me →</button>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="scroll-bar"></div>
+    Scroll
   </div>
 </section>
 
+<!-- SKILLS -->
+<section id="skills" class="alt reveal">
+  <div class="sec-eyebrow">What I Know</div>
+  <h2 class="sec-title">Skills & Technologies</h2>
+
+  <div class="skills-grid">
+    <div class="skill-col">
+      <div class="skill-col-icon">🛠</div>
+      <h3 class="skill-col-title">Minecraft</h3>
+      <ul class="skill-list">
+        <li>Spigot / Paper API</li>
+        <li>BungeeCord</li>
+        <li>Velocity</li>
+        <li>NMS (Net Minecraft Server)</li>
+        <li>ProtocolLib</li>
+      </ul>
+    </div>
+    <div class="skill-col">
+      <div class="skill-col-icon">🤖</div>
+      <h3 class="skill-col-title">Discord</h3>
+      <ul class="skill-list">
+        <li>Discord.js</li>
+        <li>Slash Commands</li>
+        <li>Interactive Buttons</li>
+        <li>Bot Automation</li>
+        <li>Server Setup & Config</li>
+      </ul>
+    </div>
+    <div class="skill-col">
+      <div class="skill-col-icon">🌐</div>
+      <h3 class="skill-col-title">Web Development</h3>
+      <ul class="skill-list">
+        <li>HTML5 / CSS3</li>
+        <li>JavaScript (Vanilla)</li>
+        <li>Responsive UI Design</li>
+        <li>Modern Animations</li>
+        <li>Performance Optimization</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- WHY ME -->
+<section id="why" class="reveal">
+  <div class="sec-eyebrow">Why Work With Me</div>
+  <h2 class="sec-title">What Makes Me Different</h2>
+
+  <div class="why-grid">
+    <div class="why-card wide">
+      <div class="why-emoji">⚡</div>
+      <h3 class="why-title">Expertise Built From Real Experience</h3>
+      <p class="why-desc">I've built and managed full Minecraft servers from the ground up with my own hands — not just theory. I have created 6 survivals running inside a single server, integrated advanced plugins like VK Mace, Guns, Modern Life, and more. I know what works, what breaks, and how to build systems that scale. That same hands-on experience carries over into every Discord bot and web project I take on.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">💡</div>
+      <h3 class="why-title">Creativity First</h3>
+      <p class="why-desc">Every project I take on gets a unique treatment. I don't copy-paste — I think through what would make your server or bot genuinely memorable and fun to use.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">🛠</div>
+      <h3 class="why-title">Clean & Quality Code</h3>
+      <p class="why-desc">Maintainable, well-structured, and high-performance systems. Your projects will run smooth, stable, and be easy to extend later.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">🤝</div>
+      <h3 class="why-title">Reliable Communication</h3>
+      <p class="why-desc">Professional, timely, and transparent. You'll always know where your project stands — no ghosting, no surprises.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">⏱</div>
+      <h3 class="why-title">On-Time Delivery</h3>
+      <p class="why-desc">Deadlines matter. I plan my work carefully so your project is delivered on time, every time — without cutting corners on quality.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="alt reveal">
+  <div class="sec-eyebrow">My Work</div>
+  <h2 class="sec-title">Projects</h2>
+
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-num">01</div>
+      <h3 class="project-title">MC Server Setup</h3>
+      <p class="project-desc">A premium Discord server built from scratch — complete clean look with per-voice channels, chatting, ticket systems, staff chat, admin areas, and full moderation infrastructure. Everything organized and professional.</p>
+      <div class="project-chips">
+        <span class="chip">Discord</span>
+        <span class="chip">Server Setup</span>
+        <span class="chip">Bots</span>
+        <span class="chip">Moderation</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">02</div>
+      <h3 class="project-title">Ultimate Rivals</h3>
+      <p class="project-desc">A full-scale SMP with custom mechanics, deep performance tuning, and best-in-class plugin selection. Built with custom systems and heavy optimizations to ensure zero-lag gameplay even under load.</p>
+      <div class="project-chips">
+        <span class="chip">Spigot</span>
+        <span class="chip">SMP</span>
+        <span class="chip">Performance</span>
+        <span class="chip">Custom Plugins</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">03</div>
+      <h3 class="project-title">RockRivals</h3>
+      <p class="project-desc">Feature-packed competitive server featuring Events, Bedwars setup, polished PvP systems, LifeSteal mechanics, and a Modded Survival mode — multiple game modes unified under one roof.</p>
+      <div class="project-chips">
+        <span class="chip">Bedwars</span>
+        <span class="chip">PvP</span>
+        <span class="chip">LifeSteal</span>
+        <span class="chip">Events</span>
+        <span class="chip">Modded</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT FOOTER SECTION -->
+<section id="contact-footer" class="reveal" style="background:var(--surface);text-align:center;padding:100px 60px;">
+  <div class="sec-eyebrow" style="justify-content:center;">Let's Build Something</div>
+  <h2 class="sec-title" style="margin-bottom:20px;">Ready to Work Together?</h2>
+  <p style="font-size:14px;color:var(--muted);max-width:480px;margin:0 auto 40px;line-height:1.75;">Have a server idea, a Discord bot project, or something you want to build? Drop me a message and let's make it happen.</p>
+  <button class="btn btn-solid" onclick="openModal()" style="margin:0 auto;display:inline-flex;">
+    Get In Touch
+    <svg style="margin-left:6px" width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M2 8H14M14 8L10 4M14 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</section>
+
+<!-- FOOTER -->
 <footer>
-  © 2026 RockyJi — Developer
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="f-name">⚡ RockyJi</div>
+      <div class="f-title">Minecraft Developer<br>Discord Bot Creator<br>Web Developer</div>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Quick Links</p>
+      <ul class="footer-links">
+        <li><a href="#skills">Skills & Technologies</a></li>
+        <li><a href="#why">Why Choose Me</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="javascript:void(0)" onclick="openModal()">Contact Me</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Find Me On</p>
+      <ul class="footer-links">
+        <li>
+          <a href="mailto:anshjidiscord12@gmail.com">
+            <span class="link-icon">📧</span> anshjidiscord12@gmail.com
+          </a>
+        </li>
+        <li>
+          <a href="https://discord.gg/XwCtnG8R" target="_blank">
+            <span class="link-icon">🎮</span> discord.gg/XwCtnG8R
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/RockyJi-IN/" target="_blank">
+            <span class="link-icon">💻</span> github.com/RockyJi-IN
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" onclick="openModal()">
+            <span class="link-icon">✉️</span> Send a Message
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 RockyJi — All rights reserved.</div>
+    <div class="footer-handle">@RockyJi · Developer · India 🇮🇳</div>
+  </div>
 </footer>
 
+<script>
+// ── EMAILJS INIT ──────────────────────────────────────────────
+// 🔧 SETUP INSTRUCTIONS:
+// 1. Go to https://www.emailjs.com/ and create a FREE account
+// 2. Add a new Email Service (Gmail) → copy your SERVICE_ID
+// 3. Create a new Email Template with these variables:
+//    {{from_name}}, {{from_email}}, {{message}}
+//    Copy your TEMPLATE_ID
+// 4. Go to Account → copy your PUBLIC_KEY
+// 5. Replace the 3 values below ↓
+
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // ← replace
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // ← replace
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // ← replace
+
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
+function sendEmail() {
+  const name    = document.getElementById('fname').value.trim();
+  const email   = document.getElementById('femail').value.trim();
+  const message = document.getElementById('fmsg').value.trim();
+  const status  = document.getElementById('formStatus');
+  const btn     = document.getElementById('sendBtn');
+  const btnTxt  = document.getElementById('btnText');
+
+  if (!name || !email || !message) {
+    status.className = 'form-status error';
+    status.textContent = '⚠️ Please fill in all fields.';
+    return;
+  }
+
+  btn.disabled = true;
+  btnTxt.textContent = 'Sending...';
+  status.className = 'form-status';
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    from_name:  name,
+    from_email: email,
+    message:    message,
+    to_email:   'anshjidiscord12@gmail.com'
+  })
+  .then(() => {
+    status.className = 'form-status success';
+    status.textContent = '✅ Message sent! I\'ll reply soon.';
+    document.getElementById('fname').value = '';
+    document.getElementById('femail').value = '';
+    document.getElementById('fmsg').value = '';
+    btn.disabled = false;
+    btnTxt.textContent = 'Send Message';
+  })
+  .catch((err) => {
+    console.error('EmailJS error:', err);
+    // Fallback: open mailto
+    const mailtoLink = `mailto:anshjidiscord12@gmail.com?subject=Message from ${encodeURIComponent(name)}&body=${encodeURIComponent('From: '+name+'\nEmail: '+email+'\n\n'+message)}`;
+    window.open(mailtoLink);
+    status.className = 'form-status success';
+    status.textContent = '📧 Opening your email client as fallback...';
+    btn.disabled = false;
+    btnTxt.textContent = 'Send Message';
+  });
+}
+
+// ── MODAL ──────────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').onclick = closeModal;
+document.getElementById('modalOverlay').addEventListener('click', function(e){
+  if (e.target === this) closeModal();
+});
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+// ── CURSOR ─────────────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('ring');
+let mx=0, my=0, rx=0, ry=0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+
+(function animRing() {
+  rx += (mx - rx) * 0.13;
+  ry += (my - ry) * 0.13;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+
+document.querySelectorAll('a, button, .why-card, .project-card, .skill-col').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '18px'; cursor.style.height = '18px';
+    ring.style.width = '50px'; ring.style.height = '50px';
+    ring.style.borderColor = 'rgba(0,229,160,0.6)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '10px'; cursor.style.height = '10px';
+    ring.style.width = '34px'; ring.style.height = '34px';
+    ring.style.borderColor = 'rgba(0,229,160,0.35)';
+  });
+});
+
+// ── SCROLL REVEAL ──────────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+
+// ── NAVBAR SCROLL ──────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 60) {
+    nav.style.background = 'rgba(8,8,14,0.95)';
+  } else {
+    nav.style.background = 'rgba(8,8,14,0.8)';
+  }
+});
+</script>
 </body>
-  </html>
+</html>
