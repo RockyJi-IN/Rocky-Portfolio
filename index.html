@@ -275,6 +275,26 @@
     }
     @keyframes scanBar { 0%{left:-60%;} 100%{left:110%;} }
 
+    /* PROJECT VISIT LINK */
+    .project-link {
+      display:inline-flex; align-items:center; gap:8px;
+      margin-top:20px;
+      font-family:'Share Tech Mono',monospace; font-size:0.72rem; letter-spacing:2px;
+      color:var(--cyan); text-decoration:none; text-transform:uppercase;
+      border:1px solid rgba(0,245,255,0.3); padding:8px 18px;
+      clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+      background:rgba(0,245,255,0.04);
+      transition:all 0.3s; position:relative; overflow:hidden;
+    }
+    .project-link::before {
+      content:''; position:absolute; inset:0;
+      background:rgba(0,245,255,0.1); transform:translateX(-100%); transition:transform 0.3s;
+    }
+    .project-link:hover::before { transform:translateX(0); }
+    .project-link:hover { border-color:var(--cyan); box-shadow:var(--glow-cyan); transform:translateY(-2px); }
+    .project-link-arrow { font-size:0.8rem; transition:transform 0.2s; }
+    .project-link:hover .project-link-arrow { transform:translateX(3px); }
+
     /* CONTACT SECTION */
     #contact { text-align:center; border-top:1px solid var(--border); }
     .contact-inner { max-width:700px; margin:0 auto; }
@@ -408,52 +428,27 @@
 
     /* RESPONSIVE — MOBILE */
     @media(max-width:768px){
-      /* NAV */
       nav { padding:14px 20px; }
       .nav-links { display:none; }
       .hamburger { display:flex; }
       .mobile-menu { display:flex; }
-
-      /* SECTIONS */
       section { padding:70px 20px; }
-      #hero {
-        padding-left:20px; padding-right:20px;
-        padding-top:120px; align-items:flex-start;
-      }
-
-      /* HERO */
+      #hero { padding-left:20px; padding-right:20px; padding-top:120px; align-items:flex-start; }
       .hero-status { font-size:0.65rem; letter-spacing:2px; flex-wrap:wrap; gap:6px; }
       .hero-title { font-size:clamp(2.4rem,12vw,3.5rem); }
       .hero-sub { font-size:clamp(0.8rem,4vw,1.1rem); letter-spacing:3px; }
       .hero-tags { font-size:0.8rem; letter-spacing:1px; line-height:2; }
       .hero-btns { flex-direction:column; gap:14px; width:100%; }
       .btn { width:100%; justify-content:center; padding:14px 20px; font-size:0.7rem; }
-
-      /* GRIDS */
-      .projects-grid,
-      .skills-grid,
-      .why-grid { grid-template-columns:1fr; gap:16px; }
-
-      /* SECTION TITLES */
+      .projects-grid,.skills-grid,.why-grid { grid-template-columns:1fr; gap:16px; }
       .section-title { font-size:clamp(1.6rem,7vw,2.2rem); margin-bottom:36px; }
-
-      /* CARDS */
-      .skill-card, .why-card { padding:28px 22px; }
+      .skill-card,.why-card { padding:28px 22px; }
       .project-card { padding:28px 24px; }
-
-      /* CONTACT LINKS */
       .contact-links { flex-direction:column; align-items:center; gap:14px; }
       .contact-link { width:100%; max-width:280px; justify-content:center; }
-
-      /* MODAL */
-      .modal-box {
-        padding:32px 20px; margin:16px;
-        clip-path:polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
-      }
+      .modal-box { padding:32px 20px; margin:16px; clip-path:polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px); }
       .modal-title { font-size:1.2rem; margin-bottom:24px; }
       .form-submit { font-size:0.65rem; letter-spacing:2px; cursor:pointer; }
-
-      /* FOOTER */
       footer { font-size:0.65rem; letter-spacing:1px; padding:24px 16px; }
     }
 
@@ -462,7 +457,7 @@
       .hero-title { font-size:2.2rem; }
       .hero-sub { font-size:0.75rem; letter-spacing:2px; }
       .nav-logo { font-size:1.1rem; letter-spacing:2px; }
-      .skill-card, .why-card, .project-card { padding:22px 16px; }
+      .skill-card,.why-card,.project-card { padding:22px 16px; }
     }
   </style>
 </head>
@@ -643,6 +638,15 @@
         <p class="project-desc">Built a self-hosted VPS from scratch using VirtualBox and deployed a fully functional Minecraft server on it — zero paid hosting, 100% custom setup.</p>
         <div class="project-bar"></div>
       </div>
+      <div class="project-card reveal" style="transition-delay:0.6s" data-num="05">
+        <div class="project-num">PROJECT // 05</div>
+        <div class="project-name">Developer's Area 51</div>
+        <p class="project-desc">A full-scale developer marketplace where devs can sell Minecraft plugins, Discord bots & web apps. Features tier-based pricing, cart system, OTP signup, OAuth login, and a complete user dashboard.</p>
+        <div class="project-bar"></div>
+        <a href="https://developersarea51.netlify.app" target="_blank" rel="noopener noreferrer" class="project-link">
+          ⬡ Visit Website <span class="project-link-arrow">→</span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -671,7 +675,6 @@
     const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
     if (isTouch) {
-      // Hide custom cursor on touch devices, restore native cursor
       cur.style.display = 'none';
       ring.style.display = 'none';
       document.body.style.cursor = 'auto';
@@ -715,7 +718,6 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
     // ===== EMAILJS =====
-    // ⚠️ REPLACE 'Vhahqp13uq9v6MLfa' with your key from emailjs.com > Account > API Keys
     emailjs.init('Vhahqp13uq9v6MLfa');
 
     async function handleSubmit(e) {
@@ -758,15 +760,12 @@
 
     (function frame() {
       ctx.clearRect(0,0,canvas.width,canvas.height);
-      // grid
       ctx.strokeStyle='rgba(0,245,255,0.022)'; ctx.lineWidth=1;
       for(let x=0;x<canvas.width;x+=80){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}
       for(let y=0;y<canvas.height;y+=80){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}
-      // mouse glow
       const g=ctx.createRadialGradient(mX,mY,0,mX,mY,280);
       g.addColorStop(0,'rgba(0,245,255,0.05)'); g.addColorStop(1,'transparent');
       ctx.fillStyle=g; ctx.fillRect(0,0,canvas.width,canvas.height);
-      // particles
       pts.forEach(p=>{
         p.x+=p.vx; p.y+=p.vy;
         if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
@@ -774,7 +773,6 @@
         ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
         ctx.fillStyle=`rgba(0,245,255,${p.a})`; ctx.fill();
       });
-      // connections
       for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
         const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.sqrt(dx*dx+dy*dy);
         if(d<115){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(0,245,255,${0.07*(1-d/115)})`;ctx.lineWidth=0.5;ctx.stroke();}
@@ -820,7 +818,6 @@
         if(rect.top < window.innerHeight) el.classList.add('visible');
       });
     });
-
   </script>
 </body>
 </html>
